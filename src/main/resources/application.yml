@@ -1,0 +1,53 @@
+server:
+  port: 9633
+  servlet:
+    context-path: /
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://10.0.8.11:3308/ssm_template_db?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  jackson:
+    time-zone: GMT-8
+    date-format: yyyy-MM-dd HH:mm:ss
+    default-property-inclusion: non_empty
+  redis:
+    database: 0
+    host: 10.0.8.11
+    port: 6379
+    password: 123456
+  application:
+    name: ssm_template_springboot
+  mail:
+    host: smtp.qq.com
+    port: 465
+    username: xxx@qq.com
+    password: xxxx
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+            socketFactory:
+              class: com.sun.mail.util.MailSSLSocketFactory
+              fallback: false
+mybatis:
+  type-aliases-package: cool.wangshuo.cm.entity
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:mappers/*.xml
+
+knife4j:
+  # 开启增强配置
+  enable: true
+  # 开启生产环境屏蔽
+  production: false
+
+# 项目自定义配置信息
