@@ -29,6 +29,8 @@ public class MyMvcConfig implements WebMvcConfigurer {
 //                        "/**/*.jpg",
 //                        "/**/*.png"
 //                );
+        registry.addInterceptor(new AuthInterceptor())
+                .addPathPatterns("/**");
     }
 
     /**
