@@ -1,14 +1,20 @@
 package cool.wangshuo.st.advice;
 
 
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import cool.wangshuo.st.model.response.GlobalResult;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.List;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.ValidationException;
+import java.util.stream.Collectors;
 
 /**
  * @author wangshuo
@@ -16,36 +22,56 @@ import java.util.List;
  * @createDate 2022/10/26 16:52
  */
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalAdvice {
 
-
     /**
-     * ExceptionHandler的作用是用来捕获指定的异常
-     * 这里示例 捕获 Java的validation做入参的校验 的校验失败的异常
-     * 统一处理，免得返回前端
-     * @param e
-     * @return
-     */
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public GlobalResult handleStoreAuthException(MethodArgumentNotValidException e) {
-        List<ObjectError> allErrors = e.getBindingResult().getAllErrors();
-        StringBuilder detailMsg = new StringBuilder();
-        if (CollectionUtils.isNotEmpty(allErrors)) {
-            allErrors.stream().forEach(i -> detailMsg.append(i.getDefaultMessage()).append(";"));
-        }
-        return GlobalResult.build(GlobalResult.ERROR_CODE, detailMsg.toString());
-    }
-
-
-    /**
-     * ExceptionHandler的作用是用来捕获指定的异常
-     * 这里示例 捕获 Exception异常
+     * 拦截所有的异常信息
+     * 1、打印异常信息 <br/>
+     * 2、
      * @param e
      * @return
      */
     @ExceptionHandler(Exception.class)
-    public GlobalResult handleStoreAuthException(Exception e) {
-        return GlobalResult.build(GlobalResult.ERROR_CODE, e.getMessage());
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public GlobalResult<String> exception(Exception e) {
+        log.error("全局异常信息 ex={}", e.getMessage(), e);
+        return GlobalResult.error(500,e.getMessage());
+    }
+
+    /**
+     * 为了方便前端提示，简化 Validator 校验框架返回的错误提示
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(value = {BindException.class, ValidationException.class, MethodArgumentNotValidException.class})
+    public GlobalResult<String> handleValidatedException(Exception e) {
+        log.info(String.valueOf(HttpStatus.BAD_REQUEST.value()));
+
+        if (e instanceof MethodArgumentNotValidException) {
+            // BeanValidation exception
+            log.info("BeanValidation exception");
+            MethodArgumentNotValidException ex = (MethodArgumentNotValidException) e;
+            return GlobalResult.error(ex.getBindingResult().getAllErrors().stream()
+                    .map(ObjectError::getDefaultMessage)
+                    .collect(Collectors.joining("\n")));
+        } else if (e instanceof ConstraintViolationException) {
+            // BeanValidation GET simple param
+            log.info("BeanValidation GET simple param");
+            ConstraintViolationException ex = (ConstraintViolationException) e;
+            return GlobalResult.error(ex.getConstraintViolations().stream()
+                    .map(ConstraintViolation::getMessage)
+                    .collect(Collectors.joining("\n")));
+
+        } else if (e instanceof BindException) {
+            log.info("BeanValidation GET object param");
+            // BeanValidation GET object param
+            BindException ex = (BindException) e;
+            return GlobalResult.error(ex.getAllErrors().stream()
+                    .map(ObjectError::getDefaultMessage)
+                    .collect(Collectors.joining("\n")));
+        }
+        return GlobalResult.error();
     }
 }
