@@ -15,7 +15,6 @@ import java.lang.reflect.Method;
 
 /**
  * 自定义的拦截器： <br
- * 1. 请求日志打印输出
  */
 @Component
 @Slf4j

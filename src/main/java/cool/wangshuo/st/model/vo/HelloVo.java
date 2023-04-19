@@ -1,4 +1,4 @@
-package cool.wangshuo.st.model.request;
+package cool.wangshuo.st.model.vo;
 
 
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import javax.validation.constraints.NotEmpty;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class HelloRequest {
+public class HelloVo {
 
     @NotEmpty(message = "姓名不能为空")
     private String username;

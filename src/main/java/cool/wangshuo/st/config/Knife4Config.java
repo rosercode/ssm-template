@@ -26,7 +26,7 @@ public class Knife4Config {
                 .enable(true)
                 .select()
                 // 扫描的路径包,设置basePackage会将包下的所有被@Api标记类的所有方法作为api
-                .apis(RequestHandlerSelectors.basePackage("cool.wangshuo.template.controller"))
+                .apis(RequestHandlerSelectors.basePackage("cool.wangshuo.st.controller"))
                 //指定路径处理PathSelectors.any()代表所有的路径
                 .paths(PathSelectors.any())
                 .build();
@@ -34,7 +34,7 @@ public class Knife4Config {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Album 系统接口文档") //设置文档标题(API名称)
+                .title("系统接口文档") //设置文档标题(API名称)
                 .description("文档描述") //文档描述
                 //.termsOfServiceUrl("http://localhost:5446/") //服务条款URL
                 .version("1.0.0") //版本号

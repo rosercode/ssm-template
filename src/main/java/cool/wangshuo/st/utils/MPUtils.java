@@ -2,7 +2,7 @@ package cool.wangshuo.st.utils;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import cool.wangshuo.st.model.enums.SortTypeEnum;
-import cool.wangshuo.st.model.request.base.BaseSortRequest;
+import cool.wangshuo.st.model.vo.base.BaseSortVo;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;
@@ -32,7 +32,7 @@ public class MPUtils {
     }
 
     // 更新 mp 查询容器
-    public static void updateQueryWrapper(QueryWrapper queryWrapper, BaseSortRequest sortRequest){
+    public static void updateQueryWrapper(QueryWrapper queryWrapper, BaseSortVo sortRequest){
 
         if (StringUtils.isNotBlank(sortRequest.getColumn()) && sortRequest.getSortType()!=null){
             if (sortRequest.getSortType() == SortTypeEnum.DESC){

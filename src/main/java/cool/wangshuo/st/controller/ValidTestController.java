@@ -1,7 +1,6 @@
 package cool.wangshuo.st.controller;
 
 import cool.wangshuo.st.model.response.GlobalResult;
-import cool.wangshuo.st.model.vo.GoodsAddVo;
 import cool.wangshuo.st.model.vo.valid.ValidGetVo;
 import cool.wangshuo.st.model.vo.valid.ValidVO;
 import io.swagger.annotations.Api;
