@@ -1,4 +1,4 @@
-package cool.wangshuo.st.model.request.base;
+package cool.wangshuo.st.model.vo.base;
 
 import cool.wangshuo.st.model.enums.SortTypeEnum;
 import io.swagger.annotations.ApiModelProperty;
@@ -11,7 +11,7 @@ import lombok.Data;
  */
 
 @Data
-public class BaseSortRequest extends BasePageRequest{
+public class BaseSortVo extends BasePageVo {
 
     @ApiModelProperty("字段名称 默认值: createTime")
     protected String column = "createTime";

@@ -1,4 +1,4 @@
-package cool.wangshuo.st.model.request.base;
+package cool.wangshuo.st.model.vo.base;
 
 
 import io.swagger.annotations.ApiModel;
@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(value = "请求分页实体", description = "请求分页实体")
-public class BasePageRequest {
+public class BasePageVo {
 
     @ApiModelProperty("页数")
     private Integer pageNum = 1;

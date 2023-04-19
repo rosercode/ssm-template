@@ -1,8 +1,7 @@
 package cool.wangshuo.st.controller;
 
 import com.baomidou.mybatisplus.extension.api.R;
-import cool.wangshuo.st.exception.NormalException;
-import cool.wangshuo.st.model.request.GoodsAddRequest;
+import cool.wangshuo.st.model.vo.GoodsAddVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -14,17 +13,14 @@ import javax.validation.Valid;
 @Api(value = "API")
 public class HelloController {
 
-    @GetMapping(value = "/1")
+    @GetMapping(value = "/add")
     @ApiOperation(value = "interface")
-    public String hello(String id){
-        if (id!=null && id.equals("1")){
-            throw new NormalException("");
-        }
-        return "Hello";
+    public R helloGet(@Valid GoodsAddVo goodsAddVo){
+        return R.ok("添加成功");
     }
 
     @PostMapping(value = "/add")
-    public R add(@Valid @RequestBody GoodsAddRequest goodsAddRequest){
+    public R add(@Valid @RequestBody GoodsAddVo goodsAddVo){
         return R.ok("添加成功");
     }
 }

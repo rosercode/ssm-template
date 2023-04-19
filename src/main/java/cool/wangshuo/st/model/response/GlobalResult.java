@@ -2,23 +2,25 @@ package cool.wangshuo.st.model.response;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
- * @author
+ * @author wangshuo
  * @description
  * @createDate 2022/10/26 16:53
  */
 
 @Data
-public class GlobalResult {
+public class GlobalResult<T> implements Serializable {
 
-    public static final String SUCCESS_CODE = "200";
+    public static final Integer SUCCESS_CODE = 200;
 
-    public static final String ERROR_CODE = "500";
+    public static final Integer ERROR_CODE = 500;
 
     /**
      * 状态码
      */
-    private String code;
+    private Integer code;
 
     /**
      * 状态码描述
@@ -28,48 +30,44 @@ public class GlobalResult {
     /**
      * 响应结果
      */
-    private Object data;
+    private T data;
 
-    private GlobalResult(String code, String message) {
+    public GlobalResult() {
+
+    }
+    private GlobalResult(Integer code, String message) {
         this(code, message, null);
     }
-
-    private GlobalResult(String code, String message, Object data) {
+    private GlobalResult(Integer code, String message, T data) {
         this.code = code;
         this.message = message;
         this.data = data;
     }
-
-
-    public static GlobalResult build(String code, String message) {
+    public static <T> GlobalResult<T>  build(Integer code, String message) {
         return new GlobalResult(code, message);
     }
-
-    public static GlobalResult build(String code, String message, Object data) {
+    public static <T> GlobalResult<T> build(Integer code, String message, T data) {
         return new GlobalResult(code, message, data);
     }
 
-    public static GlobalResult success() {
+    public static <T> GlobalResult<T> success() {
         return build(SUCCESS_CODE, "处理成功");
     }
 
-    public static GlobalResult success(String code, String message) {
+    public static <T>GlobalResult<T> success(Integer code, String message) {
         return build(code, message);
     }
 
-    public static GlobalResult success(Object data) {
+    public static <T> GlobalResult<T> success(T data) {
         return build(SUCCESS_CODE, "处理成功", data);
     }
-
-    public static GlobalResult error() {
+    public static <T>GlobalResult<T> error() {
         return build(ERROR_CODE, "处理失败");
     }
-
-    public static GlobalResult error(String message) {
+    public static <T>GlobalResult<T> error(String message) {
         return error(ERROR_CODE, message);
     }
-
-    public static GlobalResult error(String code, String message) {
+    public static <T>GlobalResult<T> error(Integer code, String message) {
         return build(code, message);
     }
 }
