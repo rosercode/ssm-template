@@ -1,7 +1,7 @@
 server:
   port: 9633
   servlet:
-    context-path: /
+    context-path: /api
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -13,7 +13,7 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
   jackson:
-    time-zone: GMT-8
+    time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
     default-property-inclusion: non_empty
   redis:
@@ -39,7 +39,6 @@ spring:
               class: com.sun.mail.util.MailSSLSocketFactory
               fallback: false
 mybatis:
-  type-aliases-package: cool.wangshuo.cm.entity
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath:mappers/*.xml
@@ -49,5 +48,9 @@ knife4j:
   enable: true
   # 开启生产环境屏蔽
   production: false
-
 # 项目自定义配置信息
+
+st:
+  redis:
+    # 项目是否启动 Redis 来启动缓存
+    enable: true
