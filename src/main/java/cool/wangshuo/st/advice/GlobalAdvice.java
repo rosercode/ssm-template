@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 public class GlobalAdvice {
 
     /**
-     * 拦截所有的异常信息
+     * 拦截所有的异常信息 <br/>
      * 1、打印异常信息 <br/>
      * 2、
      * @param e

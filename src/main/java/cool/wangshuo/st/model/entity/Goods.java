@@ -1,10 +1,13 @@
-package cool.wangshuo.st.model.vo;
+package cool.wangshuo.st.model.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
+import cool.wangshuo.st.model.base.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 /**
  * @author wangshuo
@@ -16,18 +19,21 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GoodsAddVo {
+@EqualsAndHashCode(callSuper = true)
+
+@TableName("t_goods")
+public class Goods extends BaseEntity {
 
     // 商品名称
-    @NotNull(message = "名称不能为空")
     private String name;
 
     // 商品类型
-    @NotNull(message = "类型不能为空")
     private String goodType;
 
     // 商品价格
-    @NotNull(message = "价格不能为空")
     private Integer price;
+
+    // 生产日期
+    private Date manufacturing;
 
 }

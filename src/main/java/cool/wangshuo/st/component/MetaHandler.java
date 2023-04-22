@@ -21,9 +21,10 @@ public class MetaHandler implements MetaObjectHandler {
      */
     @Override
     public void insertFill(MetaObject metaObject) {
-        boolean hasSetter = metaObject.hasSetter("createTime");
+        boolean hasSetter = metaObject.hasSetter("createdAt");
         if (hasSetter) {
-            this.setFieldValByName("createTime", new Date(), metaObject);
+            this.setFieldValByName("createdAt", new Date(), metaObject);
+            this.setFieldValByName("updatedAt", new Date(), metaObject);
         }
     }
 
@@ -32,7 +33,10 @@ public class MetaHandler implements MetaObjectHandler {
      */
     @Override
     public void updateFill(MetaObject metaObject) {
-
+        boolean hasSetter = metaObject.hasSetter("updatedAt");
+        if (hasSetter) {
+            this.setFieldValByName("updatedAt", new Date(), metaObject);
+        }
     }
 
 }
