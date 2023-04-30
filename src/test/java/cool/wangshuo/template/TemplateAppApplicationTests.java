@@ -1,13 +1,15 @@
 package cool.wangshuo.template;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class TemplateAppApplicationTests {
+public class TemplateAppApplicationTests {
+
 
     @Test
-    void contextLoads() {
-    }
+    public void insertTest() throws Exception {
 
+    }
 }
