@@ -6,12 +6,17 @@
 
 - 数据库框架: mp (mybatis-plus)
 - 前端数据校验:  Validation
-- 后端接口文档生成工具: knife4
+- 后端接口权限校验：自定义注解 + 拦截器
+- 后端接口文档生成工具: knife4j
 - 后端邮件发送: spring-boot-mail-start
 - 后端缓存: spring-boot-starter-data-redis
 - excel 表格（生成）导出功能
-- 模拟数据生成:
+- 通用的 CRUD 模块
+- 通用的用户模块。包括：登录、注册、获取用户信息、登出、等等功能
+- 模拟数据生成
 - 等等
+
+
 
 ## 目录/包 结构介绍
 
@@ -19,9 +24,9 @@
 
 项目基于 **Maven** 构建，采用 Java 后端开发常用的三层架构(controller、service、dao)，分别对应的包 
 
-- **cool.wangshuo.template.controller** 
-- **cool.wangshuo.template.service**
-- **cool.wangshuo.template.mappper**
+- **cool.wangshuo.st.controller** 
+- **cool.wangshuo.st.service**
+- **cool.wangshuo.st.mappper**
 
 > 值得在真实的项目开发中，可能是如下图所示的目录结构，本项目就不弄这么复杂了，这里只是提一句
 
@@ -53,7 +58,7 @@
 
 ### 数据库相关
 
-实体类在 **cool.wangshuo.template.model.entity** 包下，接口方法在 **cool.wangshuo.template.mapper** 包下
+实体类在 **cool.wangshuo.st.model.entity** 包下，接口方法在 **cool.wangshuo.st.mapper** 包下
 
 值得注意的是:
 
@@ -166,6 +171,137 @@ public class LogInterceptor implements HandlerInterceptor {
 - Swagger2（knife4）:配置类 Knife4Config
 - 等等
 
+### 跨域配置
 
+类位置: MyMvcConfig
+
+```java
+/**
+ * 跨域相关配置
+ * @param registry
+ */
+@Override
+public void addCorsMappings(CorsRegistry registry) {
+    registry.addMapping("/**")
+        //是否发送Cookie
+        .allowCredentials(true)
+        //放行哪些原始域
+        .allowedOriginPatterns("*")
+        .allowedMethods(new String[]{"GET", "POST", "PUT", "DELETE"})
+        .allowedHeaders("*")
+        .exposedHeaders("*");
+}
+```
+
+
+
+### 日期格式化配置
+
+位置: DateFormatForJson#extendMessageConverters
+
+```java
+/**
+ * @author rosercode
+ * @date 2023/4/19 19:29
+ */
+
+@Configuration
+public class DateFormatForJson implements WebMvcConfigurer {
+
+    @Value("${spring.jackson.date-format}")
+    private String dateFormat;
+
+
+    @Override
+    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        ObjectMapper objectMapper = converter.getObjectMapper();
+        // 生成JSON时,将所有Long转换成String
+        SimpleModule simpleModule = new SimpleModule();
+        simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
+        simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
+        objectMapper.registerModule(simpleModule);
+        // 时间格式化
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.setDateFormat(new SimpleDateFormat(dateFormat));
+        // 设置格式化内容
+        converter.setObjectMapper(objectMapper);
+        converters.add(0, converter);
+    }
+
+}
+```
+
+yml 配置
+
+```yaml
+spring:
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+    default-property-inclusion: non_empty
+```
+
+### 在线接口文档配置
+
+位置: Knife4Config
+
+项目使用的 `knife4`
+
+```java
+@EnableKnife4j
+@Configuration
+@EnableWebMvc
+@EnableSwagger2WebMvc
+public class Knife4Config {
+
+    @Bean
+    public Docket createRestApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(apiInfo())
+                //是否开启 (true 开启,false隐藏。生产环境建议隐藏)
+                .enable(true)
+                .select()
+                // 扫描的路径包,设置basePackage会将包下的所有被@Api标记类的所有方法作为api
+                .apis(RequestHandlerSelectors.basePackage("cool.wangshuo.st.controller"))
+                //指定路径处理PathSelectors.any()代表所有的路径
+                .paths(PathSelectors.any())
+                .build();
+    }
+
+    private ApiInfo apiInfo() {
+        return new ApiInfoBuilder()
+                .title("Album 系统接口文档") //设置文档标题(API名称)
+                .description("文档描述") //文档描述
+                //.termsOfServiceUrl("http://localhost:5446/") //服务条款URL
+                .version("1.0.0") //版本号
+                .build();
+    }
+}
+```
+
+### mp 分页配置
+
+​	
 
 ## 工具类
+
+## 参数校验
+
+`springboot` 项目一般使用 `Validator框架`
+
+```xml
+<!--springboot 请求参数校验-->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-validation</artifactId>
+</dependency>
+```
+
+https://juejin.cn/post/7109131754182541348#heading-1
+
+### 引入依赖
+
+## 权限校验
+
+### 
